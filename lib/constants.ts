@@ -31,9 +31,9 @@ export const UI_VERSION = publicRuntimeConfig.UI_VERSION as string;
 /**
  * Auth0
  */
-export const AUTH0_CLIENT_ID: string = "xaO8MMn04qlT3TUnhczmKWZgBzqRySDm";
-export const AUTH0_ISSUER_BASE_DOMAIN: string = "auth.igvf.org";
-export const AUTH0_AUDIENCE: string = "https://igvf-dacc.us.auth0.com/api/v2/";
+export const AUTH0_CLIENT_ID: string = "NShaVdcvTwrhat5p5utXbEEIkUaotOA4";
+export const AUTH0_ISSUER_BASE_DOMAIN: string = "latticedb.us.auth0.com";
+export const AUTH0_AUDIENCE: string = "https://latticedb.us.auth0.com/api/v2/";
 
 /**
  * Site title
