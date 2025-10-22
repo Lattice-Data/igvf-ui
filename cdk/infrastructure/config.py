@@ -67,7 +67,7 @@ config: Dict[str, Any] = {
             },
             'waf': {
                 'enabled': True,
-                'arn': 'arn:aws:wafv2:us-west-2:109189702753:regional/webacl/IgvfUiDemoWaf-HGyhnH6Z5X0B/84cce4ee-629b-41e1-9918-feb83b50f187',
+                'arn': 'arn:aws:wafv2:us-west-2:159466469043:regional/webacl/Lattice2UiDemoWaf-80ZGFPAwWR1c/1d0513b8-092c-404e-96ed-0d5a0c548c9b',
             },
             'tags': [
                 ('time-to-live-hours', '60'),
@@ -95,9 +95,9 @@ config: Dict[str, Any] = {
             },
             'waf': {
                 'enabled': True,
-                'arn': 'arn:aws:wafv2:us-west-2:109189702753:regional/webacl/IgvfUiDemoWaf-HGyhnH6Z5X0B/84cce4ee-629b-41e1-9918-feb83b50f187',
+                'arn': 'arn:aws:wafv2:us-west-2:159466469043:regional/webacl/Lattice2UiDemoWaf-80ZGFPAwWR1c/1d0513b8-092c-404e-96ed-0d5a0c548c9b',
             },
-            'backend_url': 'https://igvfd-dev.demo.igvf.org',
+            'backend_url': 'https://igvfd-dev.demo.lattice-data.org',
             'tags': [
             ],
         },
@@ -122,9 +122,9 @@ config: Dict[str, Any] = {
             },
             'waf': {
                 'enabled': True,
-                'arn': 'arn:aws:wafv2:us-west-2:920073238245:regional/webacl/IgvfUiStagingWaf-WnewgDLfB3IZ/4f006eae-a919-4b1f-a613-b1c7d035c7f1',
+                'arn': 'arn:aws:wafv2:us-west-2:555476105356:regional/webacl/Lattice2UiStagingWaf-DbwGbcGUeQQe/0f19be2e-0972-40fc-bc0c-d2578279d3f2',
             },
-            'backend_url': 'https://api.staging.igvf.org',
+            'backend_url': 'https://api.staging.lattice-data.org',
             'use_subdomain': False,
             'tags': [
             ],
@@ -150,9 +150,9 @@ config: Dict[str, Any] = {
             },
             'waf': {
                 'enabled': True,
-                'arn': 'arn:aws:wafv2:us-west-2:920073238245:regional/webacl/IgvfUiSandboxWaf-Cerl8Iy9s9Np/6f4843e4-4f8b-4ba5-b384-a1f02f29f0fc',
+                'arn': 'arn:aws:wafv2:us-west-2:555476105356:regional/webacl/Lattice2UiSandboxWaf-AEoL6Fu4zkmc/389b66b7-6406-42e5-8fda-eac3b2d71ca6',
             },
-            'backend_url': 'https://api.sandbox.igvf.org',
+            'backend_url': 'https://api.sandbox.lattice-data.org',
             'use_subdomain': False,
             'tags': [
             ],
@@ -178,9 +178,9 @@ config: Dict[str, Any] = {
             },
             'waf': {
                 'enabled': True,
-                'arn': 'arn:aws:wafv2:us-west-2:035226225042:regional/webacl/IgvfUiProdWaf-xj9DJbn3w2dx/180d8c06-6708-4f18-a7d2-c3c1d09c7019',
+                'arn': 'arn:aws:wafv2:us-west-2:919468641101:regional/webacl/Lattice2UiProdWaf-kwLQgLalwMt6/8ab634d1-ecda-4946-8666-29c70fb18b7a',
             },
-            'backend_url': 'https://api.data.igvf.org',
+            'backend_url': 'https://api.data.lattice-data.org',
             'use_subdomain': False,
             'tags': [
             ],
@@ -191,7 +191,7 @@ config: Dict[str, Any] = {
 
 @dataclass
 class Common:
-    organization_name: str = 'igvf-dacc'
+    organization_name: str = 'lattice-data'
     project_name: str = 'igvf-ui'
     default_region: str = 'us-west-2'
     aws_cdk_version: str = '2.151.0'
@@ -285,4 +285,4 @@ def get_pipeline_config_name_from_branch(branch: str) -> str:
 
 
 def get_backend_url_from_branch(branch: str) -> str:
-    return f'https://igvfd-{branch}.demo.igvf.org'
+    return f'https://igvfd-{branch}.demo.lattice-data.org'
