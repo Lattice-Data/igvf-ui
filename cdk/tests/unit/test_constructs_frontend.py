@@ -444,7 +444,7 @@ def test_constructs_frontend_frontend_define_domain_name(stack, instance_type, e
             use_redis_named='Redis71',
         )
     )
-    assert frontend.domain_name == 'igvf-ui-some-branch.my.test.domain.org'
+    assert frontend.domain_name == 'lattice-ui-some-branch.my.test.domain.org'
     old_config = {
         k: v
         for k, v in asdict(config).items()
@@ -487,7 +487,7 @@ def test_constructs_frontend_get_url_prefix():
         tags=[],
     )
     url_prefix = get_url_prefix(config_without_prefix)
-    assert url_prefix == 'igvf-ui-some-branch'
+    assert url_prefix == 'lattice-ui-some-branch'
     config_with_prefix = Config(
         name='abc',
         branch='some-branch',
