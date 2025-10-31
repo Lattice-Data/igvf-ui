@@ -90,7 +90,7 @@ def test_config_build_config_from_name():
     assert config.branch == 'my-branch'
     assert config.frontend
     assert config.name == 'dev'
-    assert config.backend_url == 'https://igvfd-dev.demo.lattice-data.org'
+    assert config.backend_url == 'https://lattice-api-dev.demo.lattice-data.org'
 
 
 def test_config_build_config_from_name_demo(mocker):
@@ -114,7 +114,7 @@ def test_config_build_config_from_name_demo(mocker):
         waf={},
         redis={},
     )
-    assert config.backend_url == 'https://igvfd-my-branch.demo.lattice-data.org'
+    assert config.backend_url == 'https://lattice-api-my-branch.demo.lattice-data.org'
 
 
 def test_config_build_pipeline_config_from_name():
@@ -172,7 +172,7 @@ def test_config_get_raw_config_from_name():
     assert raw_config['branch'] == 'my-branch'
     assert raw_config['frontend']
     assert raw_config['name'] == 'dev'
-    assert raw_config['backend_url'] == 'https://igvfd-dev.demo.lattice-data.org'
+    assert raw_config['backend_url'] == 'https://lattice-api-dev.demo.lattice-data.org'
 
 
 def test_config_get_raw_config_from_name_demo():
@@ -210,7 +210,7 @@ def test_config_maybe_add_backend_url():
         maybe_add_backend_url(calculated_config)
     calculated_config['branch'] = 'IGVF-my-cool-feature-branch'
     maybe_add_backend_url(calculated_config)
-    assert calculated_config['backend_url'] == 'https://igvfd-IGVF-my-cool-feature-branch.demo.lattice-data.org'
+    assert calculated_config['backend_url'] == 'https://lattice-api-IGVF-my-cool-feature-branch.demo.lattice-data.org'
     calculated_config
     calculated_config['branch'] = 'IGVF-my-cool-feature-branch'
     calculated_config['backend_url'] = 'http://someotherendpoint.org'
@@ -237,7 +237,7 @@ def test_config_fill_in_calculated_config():
         'waf': {},
         'branch': 'my-branch',
         'name': 'demo',
-        'backend_url': 'https://igvfd-my-branch.demo.lattice-data.org',
+        'backend_url': 'https://lattice-api-my-branch.demo.lattice-data.org',
         'tags': [('xyz', '123')]
     }
 
@@ -264,4 +264,4 @@ def test_config_get_backend_url_from_branch():
     from infrastructure.config import get_backend_url_from_branch
     assert get_backend_url_from_branch(
         'IGVF-my-feature-branch-123'
-    ) == 'https://igvfd-IGVF-my-feature-branch-123.demo.lattice-data.org'
+    ) == 'https://lattice-api-IGVF-my-feature-branch-123.demo.lattice-data.org'
