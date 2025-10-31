@@ -97,7 +97,7 @@ config: Dict[str, Any] = {
                 'enabled': True,
                 'arn': 'arn:aws:wafv2:us-west-2:159466469043:regional/webacl/Lattice2UiDemoWaf-80ZGFPAwWR1c/1d0513b8-092c-404e-96ed-0d5a0c548c9b',
             },
-            'backend_url': 'https://igvfd-dev.demo.lattice-data.org',
+            'backend_url': 'https://lattice-api-dev.demo.lattice-data.org',
             'tags': [
             ],
         },
@@ -285,4 +285,4 @@ def get_pipeline_config_name_from_branch(branch: str) -> str:
 
 
 def get_backend_url_from_branch(branch: str) -> str:
-    return f'https://igvfd-{branch}.demo.lattice-data.org'
+    return f'https://lattice-api-{branch}.demo.lattice-data.org'
