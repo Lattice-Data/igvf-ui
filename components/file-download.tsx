@@ -3,12 +3,10 @@ import {
   ArrowDownTrayIcon,
   ArrowTopRightOnSquareIcon,
 } from "@heroicons/react/20/solid";
-import { useContext } from "react";
 // components
 import { ExternallyHostedBadge } from "./common-pill-badges";
 import { ButtonLink } from "./form-elements";
 import LinkedIdAndStatus from "./linked-id-and-status";
-import SessionContext from "./session-context";
 import { Tooltip, TooltipRef, useTooltip } from "./tooltip";
 // lib
 import { API_URL } from "../lib/constants";
@@ -30,8 +28,6 @@ export function FileDownload({
   file: FileObject;
   className?: string;
 }) {
-  const { sessionProperties } = useContext(SessionContext);
-
   const tooltipAttr = useTooltip("file-download");
 
   if (file.externally_hosted) {
@@ -59,10 +55,7 @@ export function FileDownload({
     );
   }
 
-  const isFileDownloadable = checkFileDownloadable(
-    file,
-    sessionProperties?.user?.viewing_groups
-  );
+  const isFileDownloadable = checkFileDownloadable(file);
 
   return (
     <>

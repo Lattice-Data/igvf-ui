@@ -71,12 +71,12 @@ function IndexerStateExpanded({
     <>
       <div
         data-testid="indexer-state-expanded"
-        className={`mt-2 flex items-center justify-center border-t border-gray-200 p-4 dark:border-gray-700 ${indexerStyles[indexerStyle]}`}
+        className={indexerStyles[indexerStyle]}
       >
         <TooltipRef tooltipAttr={tooltipAttr}>
           <button
             id="indexer-outline"
-            className={`h-5 w-2/3 rounded-full border p-px ${
+            className={`block h-5 w-28 rounded-full border p-px ${
               isAdmin ? "cursor-pointer" : "cursor-default"
             }`}
             onClick={isAdmin ? onClick : null}

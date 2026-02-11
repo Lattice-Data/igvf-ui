@@ -126,14 +126,14 @@ export default function AuditDoc({ auditDoc, schemas }) {
     <>
       <PagePreamble sections={sections} />
       <p>
-        The IGVF Data and Administration Coordinating Center has established an
-        audit system, utilizing flags, to detect discrepancies in the data.
-        While dependencies ensure metadata accuracy within an individual object,
-        audits primarily focus on validating metadata between linked objects.
-        For example, a specific audit has been implemented to verify the linkage
-        of Biosamples with donors sharing the same taxa. Within each audit
-        category, there could be one or more icons, each assigned a distinct
-        color corresponding to the severity level of the audit category.
+        The Lattice group has established an audit system, utilizing flags, to
+        detect discrepancies in the data. While dependencies ensure metadata
+        accuracy within an individual object, audits primarily focus on
+        validating metadata between linked objects. For example, a specific
+        audit has been implemented to verify the linkage of Biosamples with
+        donors sharing the same taxa. Within each audit category, there could be
+        one or more icons, each assigned a distinct color corresponding to the
+        severity level of the audit category.
       </p>
       <div className="text-brand mt-4 mb-1 text-lg font-semibold dark:text-[#8fb3a5]">
         {"Severity Level and Description Key"}
