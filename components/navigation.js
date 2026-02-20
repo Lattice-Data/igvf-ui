@@ -1,12 +1,7 @@
 // node_modules
 import { useAuth0 } from "@auth0/auth0-react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Bars2Icon,
-  MinusIcon,
-  PlusIcon,
-  QuestionMarkCircleIcon,
-} from "@heroicons/react/20/solid";
+import { Bars2Icon, MinusIcon, PlusIcon } from "@heroicons/react/20/solid";
 import PropTypes from "prop-types";
 import React, {
   Children,
@@ -31,7 +26,6 @@ import Link from "./link-no-prefetch";
 import { CreativeCommons, Email, Twitter } from "./site-info";
 import SiteLogo from "./logo";
 import Modal from "./modal";
-import { useBrowserStateQuery } from "./presentation-status";
 import SessionContext from "./session-context";
 import SiteSearchTrigger from "./site-search-trigger";
 // lib
@@ -138,7 +132,7 @@ function NavigationIcon({ isNarrowNav, children }) {
   const iconElement = Children.only(children);
   if (isValidElement(iconElement)) {
     return React.cloneElement(iconElement, {
-      className: `${isNarrowNav ? "h-8 w-8" : "mr-1 h-4 w-4}"} ${
+      className: `${isNarrowNav ? "h-8 w-8" : "mr-1 h-4 w-4"} ${
         iconElement.props.className || ""
       }`,
     });
@@ -582,8 +576,6 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
   const { isAuthenticated } = useAuth0();
   // Logged-in session-properties object
   const { sessionProperties } = useContext(SessionContext);
-  // Extra query-string parameters for list/report pages
-  const extraQueries = useBrowserStateQuery();
 
   /**
    * Called when the user clicks a group navigation item to open or close it.
@@ -617,85 +609,36 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
           handleGroupClick={handleParentClick}
         >
           <NavigationHrefItem
-            id="raw-datasets"
-            href={`/search/?type=MeasurementSet${extraQueries}`}
+            id="samples"
+            href="/multireport/?type=Biosample"
             navigationClick={navigationClick}
             isChildItem
           >
-            Raw Data Sets
+            Samples
           </NavigationHrefItem>
           <NavigationHrefItem
-            id="processed-datasets"
-            href={`/search/?type=AnalysisSet${extraQueries}`}
+            id="libraries"
+            href="/multireport/?type=Library"
             navigationClick={navigationClick}
             isChildItem
           >
-            Processed Data Sets
+            Libraries
           </NavigationHrefItem>
           <NavigationHrefItem
-            id="prediction-datasets"
-            href={`/search/?type=PredictionSet${extraQueries}`}
+            id="filesets"
+            href="/multireport/?type=FileSet"
             navigationClick={navigationClick}
             isChildItem
           >
-            Prediction Data Sets
+            FileSets
           </NavigationHrefItem>
           <NavigationHrefItem
             id="files"
-            href={`/search/?type=File${extraQueries}`}
+            href="/multireport/?type=File"
             navigationClick={navigationClick}
             isChildItem
           >
             Files
-          </NavigationHrefItem>
-        </NavigationGroupItem>
-
-        <NavigationGroupItem
-          id="resources-standards"
-          title="Resources / Standards"
-          icon={<Icon.ResourcesStandards />}
-          isGroupOpened={openedParents.includes("resources-standards")}
-          handleGroupClick={handleParentClick}
-        >
-          <NavigationHrefItem
-            id="resources"
-            href="/resources"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Resources
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="experimental-standards"
-            href="/methodology/experimental_standards"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Experimental Standards
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="computational-standards"
-            href="/methodology/computational_standards"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Computational Standards
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="genome-references"
-            href={`/search?type=CuratedSet&file_set_type=genome${extraQueries}`}
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Genome References
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="audits"
-            href="/audits"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Audit Documentation
           </NavigationHrefItem>
         </NavigationGroupItem>
 
@@ -714,14 +657,6 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
           >
             Schemas
           </NavigationHrefItem>
-          <NavigationHrefItem
-            id="data-model-examples"
-            href="/help/data-submission/data-model-examples"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Data Model Examples
-          </NavigationHrefItem>
         </NavigationGroupItem>
 
         <NavigationGroupItem
@@ -734,62 +669,12 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
           handleGroupClick={handleParentClick}
         >
           <NavigationHrefItem
-            id="policies"
-            href="/policies"
+            id="lattice"
+            href="/lattice"
             navigationClick={navigationClick}
             isChildItem
           >
-            Policies
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="igvf-help"
-            href="/help/about-igvf"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            IGVF
-          </NavigationHrefItem>
-        </NavigationGroupItem>
-
-        <NavigationGroupItem
-          id="help"
-          title="Help"
-          icon={<QuestionMarkCircleIcon />}
-          isGroupOpened={openedParents.includes("help")}
-          handleGroupClick={handleParentClick}
-        >
-          <NavigationHrefItem
-            id="submission"
-            href="/help/data-submission"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Data Submission
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="affiliates"
-            href="https://igvf.org/affiliate-membership/"
-            navigationClick={navigationClick}
-            isChildItem
-            isExternal
-          >
-            Affiliate Membership
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="general-help"
-            href="/help/general-help"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            General Help
-          </NavigationHrefItem>
-          <NavigationHrefItem
-            id="github-issues"
-            href="mailto:igvf-portal-help@lists.stanford.edu"
-            navigationClick={navigationClick}
-            isChildItem
-          >
-            Data Portal Issues?
+            Lattice
           </NavigationHrefItem>
         </NavigationGroupItem>
 
@@ -886,16 +771,6 @@ function NavigationCollapsed({ navigationClick, toggleNavCollapsed }) {
           <Icon.UserSignedOut className="h-8 w-8" />
         </NavigationSignInItem>
       )}
-      <NavigationHrefItem
-        id="help"
-        href="/help/general-help/"
-        navigationClick={navigationClick}
-        isNarrowNav
-      >
-        <NavigationIcon isNarrowNav>
-          <QuestionMarkCircleIcon />
-        </NavigationIcon>
-      </NavigationHrefItem>
       <NavigationItem>
         <IndexerState isCollapsed />
       </NavigationItem>

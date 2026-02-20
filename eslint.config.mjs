@@ -139,6 +139,7 @@ export default defineConfig([
   {
     files: ["**/*.js", "**/*.jsx"],
     rules: {
+      "no-undef": "error",
       "no-unused-vars": [
         "error",
         {
