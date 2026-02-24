@@ -1,6 +1,5 @@
 import {
   getQueryStringFromServerQuery,
-  getUserQueryExtras,
   isJsonFormat,
   splitPathAndQueryString,
 } from "../query-utils";
@@ -74,27 +73,5 @@ describe("Test the isJsonFormat utility function", () => {
     expect(isJsonFormat({ format: "json" })).toEqual(true);
     expect(isJsonFormat({})).toEqual(false);
     expect(isJsonFormat({ type: "Gene" })).toEqual(false);
-  });
-});
-
-describe("Test the `getUserQueryExtras` function", () => {
-  it("should return status!=deleted for admin user", () => {
-    const sessionProperties = {
-      "auth.userid": "example@igvf.org",
-      admin: true,
-    };
-    expect(getUserQueryExtras(sessionProperties)).toEqual("&status!=deleted");
-  });
-
-  it("should return nothing for submitter", () => {
-    const sessionProperties = {
-      "auth.userid": "example@igvf.org",
-    };
-    expect(getUserQueryExtras(sessionProperties)).toEqual("");
-  });
-
-  it("should return status=released for non-logged-in user", () => {
-    const sessionProperties = {};
-    expect(getUserQueryExtras(sessionProperties)).toEqual("&status=released");
   });
 });

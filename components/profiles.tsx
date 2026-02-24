@@ -9,7 +9,6 @@ import { Fragment } from "react";
 // components
 import { DataItemLabel, DataItemValue } from "./data-area";
 import { AttachedButtons, ButtonLink, TextField } from "./form-elements";
-import { useBrowserStateQuery } from "./presentation-status";
 import SeparatedList from "./separated-list";
 import { VersionNumber } from "./version-number";
 // lib
@@ -17,12 +16,6 @@ import { isObjectArrayProperty, isStringArrayProperty } from "../lib/general";
 import { schemaToPath, SEARCH_MODE_TITLE } from "../lib/profiles";
 // root
 import { Schema } from "../globals";
-
-/**
- * List of schema types that do not have additional query-string parameters for list/report pages.
- * This is usually because they have a different form of statuses.
- */
-const typesWithoutExtraQueries = ["Award", "Lab", "User"];
 
 /**
  * Displays a search field for highlighting elements of a schema or list of schemas.
@@ -82,16 +75,10 @@ export function SearchAndReportType({
   type: string;
   title: string;
 }) {
-  // Extra query-string parameters for list/report pages
-  let extraQueries = useBrowserStateQuery();
-  if (typesWithoutExtraQueries.includes(type)) {
-    extraQueries = "";
-  }
-
   return (
     <AttachedButtons>
       <ButtonLink
-        href={`/search/?type=${type}${extraQueries}`}
+        href={`/search/?type=${type}`}
         label={`List view of all ${title} objects`}
         type="secondary"
         size="sm"
@@ -100,7 +87,7 @@ export function SearchAndReportType({
         <Bars4Icon />
       </ButtonLink>
       <ButtonLink
-        href={`/multireport/?type=${type}${extraQueries}`}
+        href={`/multireport/?type=${type}`}
         label={`Report view of all ${title} objects`}
         type="secondary"
         size="sm"

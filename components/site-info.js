@@ -51,10 +51,10 @@ export function Email() {
     <div>
       <a
         className="block"
-        href="mailto:igvf-portal-help@lists.stanford.edu"
+        href="mailto:lattice-info@lists.stanford.edu"
         target="_blank"
         rel="noreferrer noopener"
-        aria-label="Email the IGVF help desk"
+        aria-label="Email the Lattice help desk"
       >
         <EnvelopeIcon className="fill-brand h-6 w-6" />
       </a>
