@@ -225,15 +225,11 @@ export async function getAllDerivedFromFiles(
  * @param file File object to check
  * @returns True if the file is downloadable
  */
-export function checkFileDownloadable(
-  file: FileObject,
-  viewingGroups: string[] = []
-): boolean {
+export function checkFileDownloadable(file: FileObject): boolean {
   const isDownloadDisabledByStatus = nonDownloadableStatuses.has(
     file.upload_status
   );
-  const isDownloadDisabledByControlledAccess =
-    file.controlled_access && !viewingGroups.includes("IGVF");
+  const isDownloadDisabledByControlledAccess = file.controlled_access;
   return (
     !isDownloadDisabledByStatus &&
     !isDownloadDisabledByControlledAccess &&

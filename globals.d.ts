@@ -105,7 +105,7 @@ export interface SchemaProperty {
   type: string;
   items?: SchemaProperty;
   properties?: SchemaProperties;
-  enum?: string[];
+  enum?: string[] | number[];
   enum_descriptions?: Record<string, string>;
   anyOf?: object[];
   oneOf?: object[];

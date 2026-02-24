@@ -1,7 +1,7 @@
 /**
  * Authentication comprises a two-step process:
  * 1. Authenticate through Auth0
- * 2. Send the access token to the IGVF server so future requests use browser cookies to
+ * 2. Send the access token to the data server so future requests use browser cookies to
  *    authenticate each request.
  * Most of the code in this file handles the server authentication step.
  */

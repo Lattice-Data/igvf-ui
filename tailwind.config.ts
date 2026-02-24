@@ -423,6 +423,8 @@ const tailwindConfig: Config = {
           "var(--color-uniform-pipeline-ring-fallback)",
       },
       fill: {
+        brand: "var(--color-brand)",
+
         "button-primary": "var(--color-button-primary-label)",
         "button-secondary": "var(--color-button-secondary-label)",
         "button-warning": "var(--color-button-warning-label)",
@@ -480,6 +482,7 @@ const tailwindConfig: Config = {
         "column-select-modal": "calc(100vh - 300px)",
       },
       stroke: {
+        "brand-accent": "var(--color-brand-accent)",
         "nav-collapse": "var(--color-nav-collapse)",
         "facet-filter-icon": "var(--color-facet-filter-icon-stroke)",
         "facet-filter-icon-set": "var(--color-facet-filter-icon-set-stroke)",

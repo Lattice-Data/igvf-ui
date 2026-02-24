@@ -38,12 +38,12 @@ export const AUTH0_AUDIENCE: string = "https://latticedb.us.auth0.com/api/v2/";
 /**
  * Site title
  */
-export const SITE_TITLE: string = "IGVF";
+export const SITE_TITLE: string = "Lattice";
 
 /**
  * Brand color
  */
-export const BRAND_COLOR: string = "#337788";
+export const BRAND_COLOR: string = "#4772b1";
 
 /**
  * Path for authorization error page
