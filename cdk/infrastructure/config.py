@@ -71,6 +71,7 @@ config: Dict[str, Any] = {
                 'enabled': True,
                 'arn': 'arn:aws:wafv2:us-west-2:159466469043:regional/webacl/Lattice2UiDemoWaf-80ZGFPAwWR1c/1d0513b8-092c-404e-96ed-0d5a0c548c9b',
             },
+            'backend_url': 'https://api.data.lattice-data.org',
             'tags': [
                 ('time-to-live-hours', '60'),
                 ('turn-off-on-friday-night', 'yes'),
