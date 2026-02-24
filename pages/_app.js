@@ -71,7 +71,7 @@ function Site({ Component, pageProps, postLoginRedirectUri }) {
         <title>{SITE_TITLE}</title>
         <meta
           name="description"
-          content="Lattice hub for the Chan Zuckerberg Initiative's (CZI) Seed, Pediatric, and Ancestry Networks, all contributing to the Human Cell Atlas consortium"
+          content="Lattice portal for the Chan Zuckerberg Biohub&rsquo;s Billion Cell Project."
         />
         <meta name="theme-color" content={BRAND_COLOR} />
         <link
