@@ -3,7 +3,6 @@ import { EnvelopeIcon } from "@heroicons/react/20/solid";
 import PropTypes from "prop-types";
 import { useContext, useEffect, useState } from "react";
 // components
-import Icon from "./icon";
 import SessionContext from "./session-context";
 // lib
 import { UI_VERSION } from "../lib/constants";
@@ -62,44 +61,6 @@ export function Email() {
   );
 }
 
-/**
- * Display the Twitter link.
- */
-export function Twitter() {
-  return (
-    <div>
-      <a
-        className="block"
-        href="https://twitter.com/IGVFConsortium"
-        target="_blank"
-        rel="noreferrer noopener"
-        aria-label="IGVF Consortium on X"
-      >
-        <Icon.Twitter className="h-6 w-6" />
-      </a>
-    </div>
-  );
-}
-
-/**
- * Display Creative Commons linked icon.
- */
-export function CreativeCommons() {
-  return (
-    <div>
-      <a
-        className="block"
-        href="https://creativecommons.org/licenses/by/4.0/"
-        target="_blank"
-        rel="noreferrer noopener"
-        aria-label="Creative Commons Attribution (CC BY) license"
-      >
-        <Icon.CCBY className="h-6 w-6" />
-      </a>
-    </div>
-  );
-}
-
 export default function SiteInfo() {
   const { session } = useContext(SessionContext);
   // Server software release version
@@ -121,7 +82,7 @@ export default function SiteInfo() {
   }, [session]);
 
   return (
-    <section className="mb-1">
+    <section className="flex justify-center">
       <Versions serverVersion={serverVersion} />
     </section>
   );
