@@ -1,6 +1,5 @@
 // node_modules
 import { Auth0Provider, useAuth0 } from "@auth0/auth0-react";
-import { XCircleIcon } from "@heroicons/react/20/solid";
 import Head from "next/head";
 import Script from "next/script";
 import PropTypes from "prop-types";
@@ -29,60 +28,6 @@ import "../styles/globals.css";
  * Location to store the Auth0 cache.
  */
 const AUTH0_CACHE_LOCATION = "localstorage";
-
-/**
- * List of domains for servers that contain test data and should display a warning banner to users,
- * as well as the corresponding server title to display in the banner.
- */
-const testServerDomains = [
-  {
-    domain: "staging.igvf.org",
-    title: "Staging",
-  },
-  {
-    domain: "sandbox.igvf.org",
-    title: "Sandbox",
-  },
-  {
-    domain: "localhost",
-    title: "local",
-  },
-];
-
-/**
- * Display a warning banner to users when they browse a test server that could have its files
- * automatically deleted after a short time. Allow the user to close the banner if they choose to.
- */
-function TestServerWarning() {
-  // Title of the test server to display in the warning banner; empty string to hide banner
-  const [testDomainTitle, setTestDomainTitle] = useState("");
-
-  useEffect(() => {
-    const matchingTestDomain = testServerDomains.find((testDomain) => {
-      return window.location.hostname === testDomain.domain;
-    });
-    if (matchingTestDomain) {
-      setTestDomainTitle(matchingTestDomain.title);
-    }
-  }, []);
-
-  if (testDomainTitle) {
-    return (
-      <div className="flex justify-center gap-1 border-b border-red-700 bg-red-600 p-1 text-sm text-white dark:border-red-700 dark:bg-red-800 dark:text-gray-100">
-        <div>
-          This is the IGVF {testDomainTitle} server for testing submissions. All
-          files submitted here will be deleted after 30 days.
-        </div>
-        <button
-          onClick={() => setTestDomainTitle("")}
-          aria-label="Close test-server warning banner"
-        >
-          <XCircleIcon className="h-4 w-4" />
-        </button>
-      </div>
-    );
-  }
-}
 
 function Site({ Component, pageProps, postLoginRedirectUri }) {
   // Flag to indicate if <Link> components should cause page reload
@@ -126,7 +71,7 @@ function Site({ Component, pageProps, postLoginRedirectUri }) {
         <title>{SITE_TITLE}</title>
         <meta
           name="description"
-          content="Portal for the Impact of Genomic Variation on Function consortium"
+          content="Lattice portal for the Chan Zuckerberg Biohub&rsquo;s Billion Cell Project."
         />
         <meta name="theme-color" content={BRAND_COLOR} />
         <link
@@ -138,16 +83,15 @@ function Site({ Component, pageProps, postLoginRedirectUri }) {
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href="/favicon-32x32.png"
+          href="/favicon-lattice-32x32.png"
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href="/favicon-16x16.png"
+          href="/favicon-lattice-16x16.png"
         />
         <link rel="manifest" href="/site.webmanifest" />
-        <meta name="msapplication-TileColor" content="#da532c" />
       </Head>
       <Script
         async
@@ -162,7 +106,6 @@ function Site({ Component, pageProps, postLoginRedirectUri }) {
           gtag('config', 'G-E2PEXFFGYR');
         `}
       </Script>
-      <TestServerWarning />
       <div className="md:container">
         <GlobalContext.Provider value={globalContext}>
           <Session postLoginRedirectUri={postLoginRedirectUri}>
