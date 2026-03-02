@@ -139,9 +139,10 @@ export function checkSearchTermSchema(
 
       // If the property has am `enum` array, search the `enum` values for the search term. We can't
       // use `includes()` for the enum array because we need to match partial strings.
-      const isSearchTermInEnum = property.enum?.some((enumValue) =>
-        enumValue.toLowerCase().includes(searchTermLower)
-      );
+      const isSearchTermInEnum = property.enum?.some((enumValue) => {
+        const value = String(enumValue).toLowerCase();
+        return value.includes(searchTermLower);
+      });
       if (isSearchTermInEnum) {
         return true;
       }
@@ -152,9 +153,10 @@ export function checkSearchTermSchema(
       }
 
       // If the property has an `items` property, search its `enum` values.
-      const isSearchTermInItemEnum = property.items?.enum?.some((enumValue) =>
-        enumValue.toLowerCase().includes(searchTermLower)
-      );
+      const isSearchTermInItemEnum = property.items?.enum?.some((enumValue) => {
+        const value = String(enumValue).toLowerCase();
+        return value.includes(searchTermLower);
+      });
       if (isSearchTermInItemEnum) {
         return true;
       }
