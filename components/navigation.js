@@ -27,6 +27,7 @@ import { Email } from "./site-info";
 import SiteLogo from "./logo";
 import Modal from "./modal";
 import SessionContext from "./session-context";
+import SiteInfo from "./site-info";
 import SiteSearchTrigger from "./site-search-trigger";
 // lib
 import { loginAuthProvider, logoutAuthProvider } from "../lib/authentication";
@@ -717,12 +718,13 @@ function NavigationExpanded({ navigationClick, toggleNavCollapsed }) {
           </NavigationSignInItem>
         )}
         <NavigationItem>
-          <IndexerState />
-        </NavigationItem>
-        <NavigationItem>
-          <div className="flex justify-center gap-2">
+          <div className="flex items-center justify-center gap-2 border-t border-gray-200 p-2 dark:border-gray-700">
+            <IndexerState />
             <Email />
           </div>
+        </NavigationItem>
+        <NavigationItem>
+          <SiteInfo />
         </NavigationItem>
       </NavigationList>
     </>
@@ -791,7 +793,7 @@ NavigationCollapsed.propTypes = {
  */
 function NavigationLogo({ toggleNavCollapsed, isNavCollapsed }) {
   return (
-    <div className="flex">
+    <div className="flex justify-between">
       <SiteLogo />
       <NavigationCollapseButton
         toggleNavCollapsed={toggleNavCollapsed}
