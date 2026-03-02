@@ -1,19 +1,6 @@
 // node_modules
 // components
 import HomeTitle from "../components/home-title";
-// lib
-import { getCachedDataFetch } from "../lib/cache";
-import FetchRequest from "../lib/fetch-request";
-
-/**
- * Key for the cache that stores the statistics for the home page.
- */
-const STATISTICS_CACHE_KEY = "home-page-statistics";
-
-/**
- * Time-to-live for the cache that stores the statistics for the home page.
- */
-const STATISTICS_CACHE_TTL = 15 * 60;
 
 export default function Home() {
   return (
