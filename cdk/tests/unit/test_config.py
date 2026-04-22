@@ -7,6 +7,24 @@ def test_config_exists():
     assert 'demo' in config['pipeline']
 
 
+def test_demo_cleanup_tags_enabled_dev_disabled():
+    from infrastructure.config import config
+    demo_pipeline_tags = config['pipeline']['demo']['tags']
+    demo_environment_tags = config['environment']['demo']['tags']
+    dev_pipeline_tags = config['pipeline']['dev']['tags']
+    dev_environment_tags = config['environment']['dev']['tags']
+
+    assert ('time-to-live-hours', '60') in demo_pipeline_tags
+    assert ('turn-off-on-friday-night', 'yes') in demo_pipeline_tags
+    assert ('time-to-live-hours', '60') in demo_environment_tags
+    assert ('turn-off-on-friday-night', 'yes') in demo_environment_tags
+
+    assert ('time-to-live-hours', '60') not in dev_pipeline_tags
+    assert ('turn-off-on-friday-night', 'yes') not in dev_pipeline_tags
+    assert ('time-to-live-hours', '60') not in dev_environment_tags
+    assert ('turn-off-on-friday-night', 'yes') not in dev_environment_tags
+
+
 def test_config_common_dataclass():
     from infrastructure.config import Common
     common = Common()
@@ -129,6 +147,7 @@ def test_config_build_pipeline_config_from_name():
     assert config.common.organization_name == 'lattice-data'
     assert config.common.project_name == 'igvf-ui'
     assert ('time-to-live-hours', '60') in config.tags
+    assert ('turn-off-on-friday-night', 'yes') in config.tags
     assert config.branch == 'my-branch'
     assert config.pipeline == 'my-pipeline'
     assert config.name == 'demo'

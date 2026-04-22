@@ -17,7 +17,7 @@ const treatmentColumns = [
         </LinkedIdAndStatus>
       );
     },
-    sorter: (item) => item.treatment_term_name.toLowerCase(),
+    sorter: (item) => item.treatment_term_name?.toLowerCase() ?? "",
   },
   {
     id: "purpose",
