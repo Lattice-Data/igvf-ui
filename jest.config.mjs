@@ -12,6 +12,8 @@ const customJestConfig = {
   modulePathIgnorePatterns: ["<rootDir>/cdk/"],
   setupFilesAfterEnv: ["./jest.setup.ts"],
   testEnvironment: "jest-environment-jsdom",
+  // Do not add globs with ** here; Jest merges these into a RegExp and ** breaks it.
+  // Keep tests out of pages/ anyway — Next treats that directory as routes.
   testPathIgnorePatterns: [
     "<rootDir>/cypress",
     "<rootDir>/docker",
@@ -19,9 +21,6 @@ const customJestConfig = {
     "<rootDir>/public",
     "<rootDir>/styles",
     "<rootDir>/cdk/",
-    // Next.js treats pages/** as routes; never put Jest tests there.
-    "<rootDir>/pages/**/__tests__/",
-    "<rootDir>/pages/api/**/__tests__/",
   ],
   transformIgnorePatterns: ["/node_modules/(?!marked)/"],
 };
