@@ -137,7 +137,7 @@ function CustomBar({ bar, type }) {
       <BarLink
         path={`/multireport/?type=${typeQuery}&lab.title=${encodeUriElement(
           lab
-        )}&${termElement}&status=released`}
+        )}&${termElement}`}
       >
         <g transform={`translate(${bar.x},${bar.y})`}>
           <rect width={bar.width} height={bar.height} className={foreground} />

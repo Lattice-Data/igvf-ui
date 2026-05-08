@@ -746,7 +746,7 @@ export default function GenesLoci() {
       </div>
       <div>
         To see more Models, review our{" "}
-        <Link href="/search/?type=ModelSet&status!=deleted">
+        <Link href="/search/?type=ModelSet">
           Model Set collection
         </Link>
       </div>

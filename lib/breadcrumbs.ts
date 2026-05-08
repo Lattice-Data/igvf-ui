@@ -71,16 +71,13 @@ function buildItemBreadcrumbs(
   meta: BreadcrumbMeta,
   collectionTitles?: CollectionTitles
 ): Breadcrumb[] {
-  const itemMeta = meta as ItemBreadcrumbMeta;
   const itemType = item["@type"][0];
   const parentTitle = collectionTitles?.[itemType] || itemType;
-  const statusQuery = itemMeta.isAdmin ? "&status!=deleted" : "";
-
   // Build the breadcrumb data from the collection and item.
   const breadcrumbs = [
     {
       title: parentTitle,
-      href: `/search/?type=${item["@type"][0]}${statusQuery}`,
+      href: `/search/?type=${item["@type"][0]}`,
     },
     {
       title,
