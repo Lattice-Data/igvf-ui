@@ -6,7 +6,7 @@ import TriBooleanTerms from "../custom-facets/tri-boolean-terms";
 const searchResults: SearchResults = {
   "@context": "/terms/",
   "@graph": [],
-  "@id": "/search/?type=InstitutionalCertificate&status!=deleted",
+  "@id": "/search/?type=InstitutionalCertificate",
   "@type": ["Search"],
   clear_filters: "/search/?type=InstitutionalCertificate",
   columns: {
@@ -38,7 +38,7 @@ const searchResults: SearchResults = {
     {
       field: "type",
       term: "InstitutionalCertificate",
-      remove: "/search/?status%21=deleted",
+      remove: "/search/?",
     },
   ],
   notification: "Success",
@@ -85,7 +85,7 @@ describe("Test TriBooleanTerms component", () => {
       radioButtons[0].click();
     });
     expect(updateQuery).toHaveBeenCalledWith(
-      "type=InstitutionalCertificate&status!=deleted&controlled_access=true"
+      "type=InstitutionalCertificate&controlled_access=true"
     );
 
     // Check the "false" radio button and expect the updateQuery function to be called with the
@@ -94,18 +94,18 @@ describe("Test TriBooleanTerms component", () => {
       radioButtons[1].click();
     });
     expect(updateQuery).toHaveBeenCalledWith(
-      "type=InstitutionalCertificate&status!=deleted&controlled_access=false"
+      "type=InstitutionalCertificate&controlled_access=false"
     );
   });
 
   test("Renders TriBooleanTerms component with controlled_access=false", () => {
     // Add a filter for controlled_access=false to the searchResults object.
     searchResultsCopy["@id"] =
-      "/search/?type=InstitutionalCertificate&status!=deleted&controlled_access=false";
+      "/search/?type=InstitutionalCertificate&controlled_access=false";
     searchResultsCopy.filters.push({
       field: "controlled_access",
       term: "false",
-      remove: "/search/?status%21=deleted",
+      remove: "/search/?",
     });
 
     const updateQuery = jest.fn();
@@ -137,7 +137,7 @@ describe("Test TriBooleanTerms component", () => {
       radioButtons[0].click();
     });
     expect(updateQuery).toHaveBeenCalledWith(
-      "type=InstitutionalCertificate&status!=deleted&controlled_access=true"
+      "type=InstitutionalCertificate&controlled_access=true"
     );
 
     // Check the "either" radio button and expect the updateQuery function to be called with the
@@ -146,18 +146,18 @@ describe("Test TriBooleanTerms component", () => {
       radioButtons[2].click();
     });
     expect(updateQuery).toHaveBeenCalledWith(
-      "type=InstitutionalCertificate&status!=deleted"
+      "type=InstitutionalCertificate"
     );
   });
 
   test("Renders TriBooleanTerms component with controlled_access=true", () => {
     // Add a filter for controlled_access=true to the searchResults object.
     searchResultsCopy["@id"] =
-      "/search/?type=InstitutionalCertificate&status!=deleted&controlled_access=true";
+      "/search/?type=InstitutionalCertificate&controlled_access=true";
     searchResultsCopy.filters.push({
       field: "controlled_access",
       term: "true",
-      remove: "/search/?status%21=deleted",
+      remove: "/search/?",
     });
 
     const updateQuery = jest.fn();
@@ -189,7 +189,7 @@ describe("Test TriBooleanTerms component", () => {
       radioButtons[1].click();
     });
     expect(updateQuery).toHaveBeenCalledWith(
-      "type=InstitutionalCertificate&status!=deleted&controlled_access=false"
+      "type=InstitutionalCertificate&controlled_access=false"
     );
 
     // Check the "either" radio button and expect the updateQuery function to be called with the
@@ -198,24 +198,24 @@ describe("Test TriBooleanTerms component", () => {
       radioButtons[2].click();
     });
     expect(updateQuery).toHaveBeenCalledWith(
-      "type=InstitutionalCertificate&status!=deleted"
+      "type=InstitutionalCertificate"
     );
   });
 
   test("Renders TriBooleanTerms component with mix of controlled_access filters", () => {
     // Add filters for controlled_access=true and controlled_access=false to the searchResults object.
     searchResultsCopy["@id"] =
-      "/search/?type=InstitutionalCertificate&status!=deleted&controlled_access=true&controlled_access=false";
+      "/search/?type=InstitutionalCertificate&controlled_access=true&controlled_access=false";
     searchResultsCopy.filters.push(
       {
         field: "controlled_access",
         term: "true",
-        remove: "/search/?status%21=deleted",
+        remove: "/search/?",
       },
       {
         field: "controlled_access",
         term: "false",
-        remove: "/search/?status%21=deleted",
+        remove: "/search/?",
       }
     );
     searchResultsCopy.facets[0].terms[0].doc_count = 1;
@@ -269,7 +269,7 @@ describe("Test TriBooleanTerms component", () => {
       radioButtons[0].click();
     });
     expect(updateQuery).toHaveBeenCalledWith(
-      "type=InstitutionalCertificate&status!=deleted&controlled_access=true"
+      "type=InstitutionalCertificate&controlled_access=true"
     );
 
     // Check the "false" radio button and expect the updateQuery function to be called with the
@@ -278,7 +278,7 @@ describe("Test TriBooleanTerms component", () => {
       radioButtons[1].click();
     });
     expect(updateQuery).toHaveBeenCalledWith(
-      "type=InstitutionalCertificate&status!=deleted&controlled_access=false"
+      "type=InstitutionalCertificate&controlled_access=false"
     );
   });
 });

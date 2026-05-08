@@ -36,7 +36,7 @@ type FileSetTypeConfig = {
  */
 export const typeConfig: { [key in FileSetType]: FileSetTypeConfig } = {
   processed: {
-    dataQuery: "config=PreferredAssayTitleSummary&status=released",
+    dataQuery: "config=PreferredAssayTitleSummary",
     typeQuery: "AnalysisSet",
     title: "Released Processed Datasets",
     termProp: "preferred_assay_titles",
@@ -44,7 +44,7 @@ export const typeConfig: { [key in FileSetType]: FileSetTypeConfig } = {
     background: "back-fileset-type-analysis",
   },
   predictions: {
-    dataQuery: "config=FileSetTypeSummary&status=released",
+    dataQuery: "config=FileSetTypeSummary",
     typeQuery: "PredictionSet",
     title: "Released Predictions Datasets",
     termProp: "file_set_type",
@@ -52,7 +52,7 @@ export const typeConfig: { [key in FileSetType]: FileSetTypeConfig } = {
     background: "back-fileset-type-prediction",
   },
   raw: {
-    dataQuery: "config=PreferredAssayTitleSummary&status=released",
+    dataQuery: "config=PreferredAssayTitleSummary",
     typeQuery: "MeasurementSet",
     title: "Released Raw Datasets",
     termProp: "preferred_assay_titles",

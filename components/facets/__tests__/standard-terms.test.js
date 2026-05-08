@@ -322,7 +322,7 @@ describe("Test the StandardTerms component", () => {
         {
           field: "type",
           term: "InstitutionalCertificate",
-          remove: "/search/?status%21=deleted",
+          remove: "/search/?",
         },
       ],
     };

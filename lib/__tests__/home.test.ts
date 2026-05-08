@@ -125,7 +125,7 @@ describe("Test convertLabDataToChartData function", () => {
 describe("Test getFileSetTypeConfig function", () => {
   test("returns the configuration for the given file-set type", () => {
     expect(getFileSetTypeConfig("raw")).toEqual({
-      dataQuery: "config=PreferredAssayTitleSummary&status=released",
+      dataQuery: "config=PreferredAssayTitleSummary",
       typeQuery: "MeasurementSet",
       title: "Released Raw Datasets",
       termProp: "preferred_assay_titles",
@@ -134,7 +134,7 @@ describe("Test getFileSetTypeConfig function", () => {
     });
 
     expect(getFileSetTypeConfig("processed")).toEqual({
-      dataQuery: "config=PreferredAssayTitleSummary&status=released",
+      dataQuery: "config=PreferredAssayTitleSummary",
       typeQuery: "AnalysisSet",
       title: "Released Processed Datasets",
       termProp: "preferred_assay_titles",
@@ -143,7 +143,7 @@ describe("Test getFileSetTypeConfig function", () => {
     });
 
     expect(getFileSetTypeConfig("predictions")).toEqual({
-      dataQuery: "config=FileSetTypeSummary&status=released",
+      dataQuery: "config=FileSetTypeSummary",
       typeQuery: "PredictionSet",
       title: "Released Predictions Datasets",
       termProp: "file_set_type",

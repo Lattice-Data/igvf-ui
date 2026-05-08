@@ -39,7 +39,7 @@ To download files from search results, you need:
 
 In this case the batch-download URL could look like:
 
-`/batch-download/?type=AnalysisSet&file_set_type=intermediate+analysis&status=released`
+`/batch-download/?type=AnalysisSet&file_set_type=intermediate+analysis`
 
 ### Individual File Set Scenario
 

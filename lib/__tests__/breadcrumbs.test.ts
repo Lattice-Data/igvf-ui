@@ -456,7 +456,7 @@ describe("Test retrieving breadcrumb metadata", () => {
     expect(breadcrumbMeta).toEqual({});
   });
 
-  it("adds a status!=deleted query parameter for admins", async () => {
+  it("builds a type-only search query for admins", async () => {
     const data = {
       "@context": "/terms/",
       "@id": "/assay-terms/OBI_0002675/",
@@ -489,7 +489,7 @@ describe("Test retrieving breadcrumb metadata", () => {
     );
     expect(breadcrumbs).toHaveLength(2);
     expect(breadcrumbs[0].title).toBe("Assay Term");
-    expect(breadcrumbs[0].href).toBe("/search/?type=AssayTerm&status!=deleted");
+    expect(breadcrumbs[0].href).toBe("/search/?type=AssayTerm");
     expect(breadcrumbs[1].title).toBe("OBI:0002675");
   });
 });

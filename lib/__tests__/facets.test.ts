@@ -147,19 +147,19 @@ describe("Test the getVisibleFilters function", () => {
         field: "assay_term.term_name",
         term: "MPRA",
         remove:
-          "/search/?type=MeasurementSet&status%21=deleted&audit.INTERNAL_ACTION.category=mismatched+status",
+          "/search/?type=MeasurementSet&audit.INTERNAL_ACTION.category=mismatched+status",
       },
       {
         field: "audit.INTERNAL_ACTION.category",
         term: "mismatched status",
         remove:
-          "/search/?type=MeasurementSet&status%21=deleted&assay_term.term_name=MPRA",
+          "/search/?type=MeasurementSet&assay_term.term_name=MPRA",
       },
       {
         field: "type",
         term: "MeasurementSet",
         remove:
-          "/search/?status%21=deleted&assay_term.term_name=MPRA&audit.INTERNAL_ACTION.category=mismatched+status",
+          "/search/?assay_term.term_name=MPRA&audit.INTERNAL_ACTION.category=mismatched+status",
       },
     ];
 
@@ -168,7 +168,7 @@ describe("Test the getVisibleFilters function", () => {
         field: "assay_term.term_name",
         term: "MPRA",
         remove:
-          "/search/?type=MeasurementSet&status%21=deleted&audit.INTERNAL_ACTION.category=mismatched+status",
+          "/search/?type=MeasurementSet&audit.INTERNAL_ACTION.category=mismatched+status",
       },
     ]);
 
@@ -177,13 +177,13 @@ describe("Test the getVisibleFilters function", () => {
         field: "assay_term.term_name",
         term: "MPRA",
         remove:
-          "/search/?type=MeasurementSet&status%21=deleted&audit.INTERNAL_ACTION.category=mismatched+status",
+          "/search/?type=MeasurementSet&audit.INTERNAL_ACTION.category=mismatched+status",
       },
       {
         field: "audit.INTERNAL_ACTION.category",
         term: "mismatched status",
         remove:
-          "/search/?type=MeasurementSet&status%21=deleted&assay_term.term_name=MPRA",
+          "/search/?type=MeasurementSet&assay_term.term_name=MPRA",
       },
     ]);
   });

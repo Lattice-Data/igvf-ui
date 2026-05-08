@@ -17,24 +17,6 @@ Disallow: /*/@@download/*
 
 Allow: /$
 
-Allow: /search/?type=MeasurementSet&status=released$
-Allow: /search/?type=AnalysisSet&status=released$
-Allow: /search/?type=PredictionSet&status=released$
-Allow: /search/?type=File&status=released$
-Allow: /search/?type=MeasurementSet&status!=deleted$
-Allow: /search/?type=AnalysisSet&status!=deleted$
-Allow: /search/?type=PredictionSet&status!=deleted$
-Allow: /search/?type=File&status!=deleted$
-
-Allow: /multireport/?type=MeasurementSet&status=released$
-Allow: /multireport/?type=AnalysisSet&status=released$
-Allow: /multireport/?type=PredictionSet&status=released$
-Allow: /multireport/?type=File&status=released$
-Allow: /multireport/?type=MeasurementSet&status!=deleted$
-Allow: /multireport/?type=AnalysisSet&status!=deleted$
-Allow: /multireport/?type=PredictionSet&status!=deleted$
-Allow: /multireport/?type=File&status!=deleted$
-
 Allow: /tissue-summary/homo-sapiens/$
 Allow: /tissue-summary/mus-musculus/$
 Allow: /cell-models/cell-lines/$
