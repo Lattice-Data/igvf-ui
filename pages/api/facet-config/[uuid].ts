@@ -86,9 +86,9 @@ export default async function handler(
   } else if (isHttpMethod(req.method, "GET")) {
     const value = await redisClient.hGet(facetStoreKey, type);
     if (value) {
-      res.status(HTTP_STATUS_CODE.CREATED).json(JSON.parse(value));
+      res.status(HTTP_STATUS_CODE.OK).json(JSON.parse(value));
     } else {
-      res.status(HTTP_STATUS_CODE.NOT_FOUND).end();
+      res.status(HTTP_STATUS_CODE.OK).json({});
     }
   } else {
     res.status(HTTP_STATUS_CODE.METHOD_NOT_ALLOWED).end();

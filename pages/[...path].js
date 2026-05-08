@@ -5,7 +5,7 @@ import buildAttribution from "../lib/attribution";
 import { getBreadcrumbMeta } from "../lib/breadcrumbs";
 import { errorObjectToProps } from "../lib/errors";
 import FetchRequest from "../lib/fetch-request";
-import { isJsonFormat } from "../lib/query-utils";
+import { isJsonFormat, splitPathAndQueryString } from "../lib/query-utils";
 // components
 import { AddableItem } from "../components/add";
 import Breadcrumbs from "../components/breadcrumbs";
@@ -121,10 +121,11 @@ export async function getServerSideProps({ req, resolvedUrl, query }) {
     // example, `resolvedUrl` might contain `/IGVFDS0000AAAA/` but when we fetch that object, the
     // resulting `generic["@id"]` might contain `/analysis-sets/IGVFDS0000AAAA/`. In that case, we
     // want to redirect to the canonical URL so we get the correct page rendering for that object.
-    if ("@id" in generic && generic["@id"] !== resolvedUrl) {
+    const { path } = splitPathAndQueryString(resolvedUrl);
+    if ("@id" in generic && generic["@id"] !== path) {
       return {
         redirect: {
-          destination: generic["@id"],
+          destination: isJson ? `${generic["@id"]}?format=json` : generic["@id"],
           permanent: true,
         },
       };

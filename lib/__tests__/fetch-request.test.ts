@@ -530,6 +530,25 @@ describe("Test GET requests to the data provider", () => {
     );
     expect(labItem.optional()).toBe(null);
   });
+
+  it("returns a structured error when response body is empty", async () => {
+    window.fetch = jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        ok: false,
+        status: 404,
+        statusText: "Not Found",
+        json: () => Promise.reject(new Error("Unexpected end of JSON input")),
+      })
+    );
+
+    const request = new FetchRequest();
+    const result = await request.getObject("/api/facet-config/user/?type=Type");
+
+    expect(result.isErr()).toBe(true);
+    expect(result.unwrap_err().code).toBe(404);
+    expect(result.unwrap_err().title).toBe("Not Found");
+    expect(result.unwrap_err()["@type"]).toContain("HTTPError");
+  });
 });
 
 describe("Test URL-specific fetch requests", () => {

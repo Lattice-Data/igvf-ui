@@ -190,6 +190,39 @@ const NETWORK_ERROR_RESPONSE: ErrorObject = {
 Object.freeze(NETWORK_ERROR_RESPONSE);
 
 /**
+ * Build a normalized error object from a failed fetch response.
+ * Handles endpoints that return empty bodies on error statuses.
+ */
+async function buildErrorObjectFromResponse(
+  response: Response
+): Promise<ErrorObject> {
+  const hasBody = response.status !== HTTP_STATUS_CODE.NO_CONTENT;
+
+  if (hasBody) {
+    try {
+      const parsedError = await response.json();
+      return {
+        ...(parsedError as object),
+        isError: true,
+      } as ErrorObject;
+    } catch (_error) {
+      // Fall through to generated error object below.
+    }
+  }
+
+  return {
+    ...NETWORK_ERROR_RESPONSE,
+    "@type": ["HTTPError", "Error"],
+    code: response.status || NETWORK_ERROR_RESPONSE.code,
+    title: response.statusText || "Request failed",
+    description: `Request failed with status ${response.status}.`,
+    detail: `Request failed with status ${response.status}.`,
+    status: "error",
+    isError: true,
+  };
+}
+
+/**
  * Estimate of the maximum size of an @id=path query-string element.
  */
 const MAX_PATH_QUERY_LENGTH_ESTIMATE = 50;
@@ -585,10 +618,7 @@ export default class FetchRequest {
       logRequest("getObject", url, this.usingPersistentConnections);
       const response = await fetch(url, headerOptions);
       if (!response.ok) {
-        const error = {
-          ...(await response.json()),
-          isError: true,
-        } as ErrorObject;
+        const error = await buildErrorObjectFromResponse(response);
         return err(error);
       }
       const results = (await response.json()) as DataProviderObject;
@@ -615,10 +645,7 @@ export default class FetchRequest {
       logRequest("getObjectByUrl", url, this.usingPersistentConnections);
       const response = await fetch(url, headerOptions);
       if (!response.ok) {
-        const error = {
-          ...(await response.json()),
-          isError: true,
-        } as ErrorObject;
+        const error = await buildErrorObjectFromResponse(response);
         return err(error);
       }
       const results = (await response.json()) as DataProviderObject;
