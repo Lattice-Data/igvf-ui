@@ -1,9 +1,9 @@
-import { HTTP_STATUS_CODE } from "../../../../lib/fetch-request";
-import handler from "../../facet-config/[uuid]";
+import { HTTP_STATUS_CODE } from "../fetch-request";
+import handler from "../../pages/api/facet-config/[uuid]";
 
 const mockGetCacheClient = jest.fn();
 
-jest.mock("../../../../lib/cache-client", () => ({
+jest.mock("../cache-client", () => ({
   getCacheClient: () => mockGetCacheClient(),
 }));
 

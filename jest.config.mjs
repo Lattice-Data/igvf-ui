@@ -19,6 +19,9 @@ const customJestConfig = {
     "<rootDir>/public",
     "<rootDir>/styles",
     "<rootDir>/cdk/",
+    // Next.js treats pages/** as routes; never put Jest tests there.
+    "<rootDir>/pages/**/__tests__/",
+    "<rootDir>/pages/api/**/__tests__/",
   ],
   transformIgnorePatterns: ["/node_modules/(?!marked)/"],
 };
