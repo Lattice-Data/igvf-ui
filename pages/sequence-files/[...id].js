@@ -25,7 +25,6 @@ import ObjectPageHeader from "../../components/object-page-header";
 import PagePreamble from "../../components/page-preamble";
 import { QualityMetricPanel } from "../../components/quality-metric";
 import SampleTable from "../../components/sample-table";
-import { SeqspecDocumentLink } from "../../components/seqspec-document";
 import { useSecDir } from "../../components/section-directory";
 import { StatusPreviewDetail } from "../../components/status";
 import WorkflowTable from "../../components/workflow-table";
@@ -35,7 +34,6 @@ import {
   requestDocuments,
   requestFiles,
   requestQualityMetrics,
-  requestSeqspecFiles,
   requestWorkflows,
 } from "../../lib/common-requests";
 import { errorObjectToProps } from "../../lib/errors";
@@ -49,16 +47,15 @@ import { isJsonFormat } from "../../lib/query-utils";
 
 export default function SequenceFile({
   sequenceFile,
+  fileSetSamples,
   documents,
   derivedFrom,
   inputFileFor,
   fileFormatSpecifications,
-  seqspecDocument,
   workflows,
   qualityMetrics,
   attribution = null,
   isJson,
-  seqspecs,
 }) {
   const sections = useSecDir({ isJson });
 
@@ -81,14 +78,6 @@ export default function SequenceFile({
           <DataPanel>
             <DataArea>
               <FileDataItems item={sequenceFile} />
-              {seqspecDocument && (
-                <>
-                  <DataItemLabel>Sequence Specification Document</DataItemLabel>
-                  <DataItemValue>
-                    <SeqspecDocumentLink seqspecDocument={seqspecDocument} />
-                  </DataItemValue>
-                </>
-              )}
               <Attribution attribution={attribution} />
             </DataArea>
           </DataPanel>
@@ -172,8 +161,8 @@ export default function SequenceFile({
               panelId="file-format-specifications"
             />
           )}
-          {sequenceFile.file_set.samples?.length > 0 && (
-            <SampleTable samples={sequenceFile.file_set.samples} />
+          {fileSetSamples.length > 0 && (
+            <SampleTable samples={fileSetSamples} />
           )}
           {derivedFrom.length > 0 && (
             <DerivedFromTable
@@ -192,14 +181,6 @@ export default function SequenceFile({
               panelId="input-file-for"
             />
           )}
-          {seqspecs.length > 0 && (
-            <FileTable
-              files={seqspecs}
-              title="Associated seqspec Files"
-              reportLink={`/multireport/?type=ConfigurationFile&seqspec_of=${sequenceFile["@id"]}`}
-              panelId="seqspec"
-            />
-          )}
           {documents.length > 0 && <DocumentTable documents={documents} />}
         </JsonDisplay>
       </EditableItem>
@@ -210,16 +191,16 @@ export default function SequenceFile({
 SequenceFile.propTypes = {
   // SequenceFile object to display
   sequenceFile: PropTypes.object.isRequired,
-  // Documents set associate with this file
+  // Samples from the file's file set
+  fileSetSamples: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // Documents associated with this file
   documents: PropTypes.array,
-  // The file is derived from
+  // Files this file derives from
   derivedFrom: PropTypes.array,
   // Files that derive from this file
   inputFileFor: PropTypes.array.isRequired,
-  // Set of documents for file specifications
+  // Documents for file format specifications
   fileFormatSpecifications: PropTypes.arrayOf(PropTypes.object),
-  // seqspec document associated with this file
-  seqspecDocument: PropTypes.object,
   // Workflows that processed this file
   workflows: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Quality metrics associated with this file
@@ -228,8 +209,6 @@ SequenceFile.propTypes = {
   attribution: PropTypes.object,
   // Is the format JSON?
   isJson: PropTypes.bool.isRequired,
-  // Linked seqspec configuration files
-  seqspecs: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export async function getServerSideProps({ params, req, query, resolvedUrl }) {
@@ -262,25 +241,18 @@ export async function getServerSideProps({ params, req, query, resolvedUrl }) {
     let fileFormatSpecifications = [];
     if (sequenceFile.file_format_specifications?.length > 0) {
       const fileFormatSpecificationsPaths =
-        sequenceFile.file_format_specifications.map(
-          (document) => document["@id"]
+        sequenceFile.file_format_specifications.map((document) =>
+          typeof document === "string" ? document : document["@id"]
         );
       fileFormatSpecifications = await requestDocuments(
         fileFormatSpecificationsPaths,
         request
       );
     }
-    const seqspecs =
-      sequenceFile.seqspecs?.length > 0
-        ? await requestSeqspecFiles([sequenceFile], request)
-        : [];
-    const seqspecDocuments = sequenceFile.seqspec_document
-      ? await requestDocuments([sequenceFile.seqspec_document], request)
-      : null;
     let workflows = [];
     if (sequenceFile.workflows?.length > 0) {
-      const workflowPaths = sequenceFile.workflows.map(
-        (workflow) => workflow["@id"]
+      const workflowPaths = sequenceFile.workflows.map((workflow) =>
+        typeof workflow === "string" ? workflow : workflow["@id"]
       );
       workflows = await requestWorkflows(workflowPaths, request);
     }
@@ -288,6 +260,14 @@ export async function getServerSideProps({ params, req, query, resolvedUrl }) {
       sequenceFile.quality_metrics?.length > 0
         ? await requestQualityMetrics(sequenceFile.quality_metrics, request)
         : [];
+    // Resolve file_set so we can access its samples. The API may return it as
+    // an embedded object or as a bare @id string depending on embed depth.
+    const fileSet =
+      typeof sequenceFile.file_set === "string"
+        ? (await request.getObject(sequenceFile.file_set)).optional()
+        : sequenceFile.file_set;
+    const fileSetSamples = fileSet?.samples ?? [];
+
     const attribution = await buildAttribution(
       sequenceFile,
       req.headers.cookie
@@ -295,17 +275,16 @@ export async function getServerSideProps({ params, req, query, resolvedUrl }) {
     return {
       props: {
         sequenceFile,
+        fileSetSamples,
         documents,
         derivedFrom,
         inputFileFor,
         fileFormatSpecifications,
-        seqspecDocument: seqspecDocuments ? seqspecDocuments[0] : null,
         workflows,
         qualityMetrics,
         pageContext: { title: sequenceFile.accession },
         attribution,
         isJson,
-        seqspecs,
       },
     };
   }
