@@ -27,12 +27,12 @@ const filesColumns = [
   {
     id: "file_format",
     title: "File Format",
-    sorter: (item) => item.file_format.toLowerCase(),
+    sorter: (item) => (item.file_format ?? "").toLowerCase(),
   },
   {
     id: "content_type",
     title: "Content Type",
-    sorter: (item) => item.content_type.toLowerCase(),
+    sorter: (item) => (item.content_type ?? "").toLowerCase(),
   },
   {
     id: "summary",
@@ -84,7 +84,8 @@ const filesColumns = [
   {
     id: "upload_status",
     title: "Upload Status",
-    display: ({ source }) => <Status status={source.upload_status} />,
+    display: ({ source }) =>
+      source.upload_status ? <Status status={source.upload_status} /> : null,
   },
 ];
 

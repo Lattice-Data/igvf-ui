@@ -43,7 +43,7 @@ const sampleColumns = [
     display: ({ source }) => {
       if (source.sample_terms?.length > 0) {
         const sortedTerms = _.sortBy(source.sample_terms, (term) =>
-          term.term_name.toLowerCase()
+          (term.term_name ?? "").toLowerCase()
         );
         return (
           <SeparatedList>
@@ -65,7 +65,7 @@ const sampleColumns = [
     display: ({ source }) => {
       if (source.disease_terms?.length > 0) {
         const sortedTerms = _.sortBy(source.disease_terms, (disease) =>
-          disease.term_name.toLowerCase()
+          (disease.term_name ?? "").toLowerCase()
         );
         return (
           <SeparatedList>

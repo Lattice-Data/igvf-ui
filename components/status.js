@@ -290,7 +290,7 @@ const statusStyles = {
  * Displays the status of any object. If new statuses get added, define their colors in the
  * `statusStyles` object above.
  */
-export default function Status({ status, isAbbreviated = false }) {
+function StatusBadge({ status, isAbbreviated }) {
   const tooltipAttr = useTooltip(`status-${toShishkebabCase(status)}`);
 
   const stylesForStatus = statusStyles[status] || statusStyles.fallback;
@@ -324,9 +324,14 @@ export default function Status({ status, isAbbreviated = false }) {
   );
 }
 
+export default function Status({ status, isAbbreviated = false }) {
+  if (!status) return null;
+  return <StatusBadge status={status} isAbbreviated={isAbbreviated} />;
+}
+
 Status.propTypes = {
   // Status of item
-  status: PropTypes.string.isRequired,
+  status: PropTypes.string,
   // Whether to display the status in abbreviated form
   isAbbreviated: PropTypes.bool,
 };

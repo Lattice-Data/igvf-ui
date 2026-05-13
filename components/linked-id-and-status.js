@@ -26,7 +26,9 @@ export default function LinkedIdAndStatus({
         >
           {children}
         </Link>
-        <Status status={status || item.status} isAbbreviated />
+        {(status || item.status) && (
+          <Status status={status || item.status} isAbbreviated />
+        )}
       </div>
     </div>
   );
