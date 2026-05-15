@@ -153,13 +153,6 @@ const columnDisplayConfig: Cell[] = [
       return <>{typeof file.lab === "object" ? file.lab.title : file.lab}</>;
     },
   },
-  {
-    id: "upload-status",
-    content: ({ source }: CellContentProps) => {
-      const file = source as FileObject;
-      return <>{file.upload_status}</>;
-    },
-  },
 ];
 
 /**
@@ -181,7 +174,6 @@ const headerRow: Row = {
     { id: "sequencing_platform", content: "Sequencing Platform" },
     { id: "file-size", content: "File Size" },
     { id: "lab", content: "Lab" },
-    { id: "upload-status", content: "Upload Status" },
   ],
   RowComponent: HeaderRowComponent,
 };

@@ -81,12 +81,6 @@ const filesColumns = [
       return filteredValues.size === 1;
     },
   },
-  {
-    id: "upload_status",
-    title: "Upload Status",
-    display: ({ source }) =>
-      source.upload_status ? <Status status={source.upload_status} /> : null,
-  },
 ];
 
 /**
