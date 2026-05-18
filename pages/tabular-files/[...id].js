@@ -17,14 +17,12 @@ import DerivedFromTable from "../../components/derived-from-table";
 import DocumentTable from "../../components/document-table";
 import { EditableItem } from "../../components/edit";
 import { FileHeaderDownload } from "../../components/file-download";
-import FileSetTable from "../../components/file-set-table";
 import FileTable from "../../components/file-table";
 import { HostedFilePreview } from "../../components/hosted-file-preview";
 import JsonDisplay from "../../components/json-display";
 import ObjectPageHeader from "../../components/object-page-header";
 import PagePreamble from "../../components/page-preamble";
 import { QualityMetricPanel } from "../../components/quality-metric";
-import SampleTable from "../../components/sample-table";
 import { useSecDir } from "../../components/section-directory";
 import { StatusPreviewDetail } from "../../components/status";
 import WorkflowTable from "../../components/workflow-table";
@@ -32,10 +30,8 @@ import WorkflowTable from "../../components/workflow-table";
 import buildAttribution from "../../lib/attribution";
 import {
   requestDocuments,
-  requestFileSets,
   requestFiles,
   requestQualityMetrics,
-  requestSamples,
   requestWorkflows,
 } from "../../lib/common-requests";
 import { errorObjectToProps } from "../../lib/errors";
@@ -49,13 +45,10 @@ import { isJsonFormat } from "../../lib/query-utils";
 
 export default function TabularFile({
   tabularFile,
-  barcodeMapFor,
   documents,
   derivedFrom,
   inputFileFor,
   fileFormatSpecifications,
-  integratedIn,
-  primerDesignFor,
   workflows,
   qualityMetrics,
   attribution = null,
@@ -128,9 +121,6 @@ export default function TabularFile({
               panelId="file-format-specifications"
             />
           )}
-          {tabularFile.file_set.samples?.length > 0 && (
-            <SampleTable samples={tabularFile.file_set.samples} />
-          )}
           {derivedFrom.length > 0 && (
             <DerivedFromTable
               derivedFrom={derivedFrom}
@@ -148,33 +138,6 @@ export default function TabularFile({
               panelId="input-file-for"
             />
           )}
-          {integratedIn.length > 0 && (
-            <FileSetTable
-              fileSets={integratedIn}
-              title="Integrated In"
-              reportLink={`/multireport/?type=ConstructLibrarySet&integrated_content_files.@id=${tabularFile["@id"]}`}
-              reportLabel={`Report of ConstructLibrarySets that integrate ${tabularFile.accession}`}
-              panelId="integrated-in"
-            />
-          )}
-          {barcodeMapFor.length > 0 && (
-            <SampleTable
-              samples={barcodeMapFor}
-              reportLink={`/multireport/?type=MultiplexedSample&barcode_map=${tabularFile["@id"]}`}
-              reportLabel="Report of multiplexed samples in which this file is a barcode map for"
-              title="Barcode Map For"
-              panelId="barcode-map-for"
-            />
-          )}
-          {primerDesignFor.length > 0 && (
-            <FileSetTable
-              fileSets={primerDesignFor}
-              title="Primer Design For"
-              reportLink={`/multireport/?type=MeasurementSet&primer_designs=${tabularFile["@id"]}`}
-              reportLabel="Report of measurement sets using this file as a primer design"
-              panelId="primer-design-for"
-            />
-          )}
           {documents.length > 0 && <DocumentTable documents={documents} />}
         </JsonDisplay>
       </EditableItem>
@@ -185,25 +148,19 @@ export default function TabularFile({
 TabularFile.propTypes = {
   // TabularFile object to display
   tabularFile: PropTypes.object.isRequired,
-  // MultiplexedSample this file is a barcode map for
-  barcodeMapFor: PropTypes.array.isRequired,
-  // Documents set associate with this file
+  // Documents associated with this file
   documents: PropTypes.array,
-  // The file is derived from
+  // Files this file derives from
   derivedFrom: PropTypes.array,
   // Files that derive from this file
   inputFileFor: PropTypes.array.isRequired,
-  // Set of documents for file specifications
+  // Documents for file format specifications
   fileFormatSpecifications: PropTypes.arrayOf(PropTypes.object),
-  // ConstructLibraryset this file was integrated in
-  integratedIn: PropTypes.arrayOf(PropTypes.object),
-  // Primer design files for this file
-  primerDesignFor: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Workflows that processed this file
   workflows: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Quality metrics for this file
   qualityMetrics: PropTypes.arrayOf(PropTypes.object),
-  // Attribution for this ReferenceFile
+  // Attribution for this file
   attribution: PropTypes.object,
   // Is the format JSON?
   isJson: PropTypes.bool.isRequired,
@@ -232,10 +189,6 @@ export async function getServerSideProps({ params, req, query, resolvedUrl }) {
     const derivedFrom = tabularFile.derived_from
       ? await requestFiles(tabularFile.derived_from, request)
       : [];
-    const barcodeMapFor =
-      tabularFile.barcode_map_for?.length > 0
-        ? await requestSamples(tabularFile.barcode_map_for, request)
-        : [];
     const inputFileFor =
       tabularFile.input_file_for?.length > 0
         ? await requestFiles(tabularFile.input_file_for, request)
@@ -243,29 +196,18 @@ export async function getServerSideProps({ params, req, query, resolvedUrl }) {
     let fileFormatSpecifications = [];
     if (tabularFile.file_format_specifications?.length > 0) {
       const fileFormatSpecificationsPaths =
-        tabularFile.file_format_specifications.map(
-          (document) => document["@id"]
+        tabularFile.file_format_specifications.map((document) =>
+          typeof document === "string" ? document : document["@id"]
         );
       fileFormatSpecifications = await requestDocuments(
         fileFormatSpecificationsPaths,
         request
       );
     }
-    let integratedIn = [];
-    if (tabularFile.integrated_in?.length > 0) {
-      const integratedInPaths = tabularFile.integrated_in.map(
-        (fileSet) => fileSet["@id"]
-      );
-      integratedIn = await requestFileSets(integratedInPaths, request);
-    }
-    const primerDesignFor =
-      tabularFile.primer_design_for?.length > 0
-        ? await requestFileSets(tabularFile.primer_design_for, request)
-        : [];
     let workflows = [];
     if (tabularFile.workflows?.length > 0) {
-      const workflowPaths = tabularFile.workflows.map(
-        (workflow) => workflow["@id"]
+      const workflowPaths = tabularFile.workflows.map((workflow) =>
+        typeof workflow === "string" ? workflow : workflow["@id"]
       );
       workflows = await requestWorkflows(workflowPaths, request);
     }
@@ -277,13 +219,10 @@ export async function getServerSideProps({ params, req, query, resolvedUrl }) {
     return {
       props: {
         tabularFile,
-        barcodeMapFor,
         documents,
         derivedFrom,
         inputFileFor,
         fileFormatSpecifications,
-        integratedIn,
-        primerDesignFor,
         workflows,
         qualityMetrics,
         pageContext: { title: tabularFile.accession },

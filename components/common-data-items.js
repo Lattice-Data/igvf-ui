@@ -631,13 +631,17 @@ export function FileDataItems({
           <DataItemValue>{item.file_format_type}</DataItemValue>
         </>
       )}
-      <DataItemLabel>Content Type</DataItemLabel>
-      <DataItemValueAnnotated
-        objectType={item["@type"][0]}
-        propertyName="content_type"
-      >
-        {item.content_type}
-      </DataItemValueAnnotated>
+      {item.content_type && (
+        <>
+          <DataItemLabel>Content Type</DataItemLabel>
+          <DataItemValueAnnotated
+            objectType={item["@type"][0]}
+            propertyName="content_type"
+          >
+            {item.content_type}
+          </DataItemValueAnnotated>
+        </>
+      )}
       {item.cell_type_annotation && (
         <>
           <DataItemLabel>Cell Type Annotation</DataItemLabel>

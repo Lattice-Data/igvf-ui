@@ -7,7 +7,6 @@ import { FileAccessionAndDownload } from "./file-download";
 import { HostedFilePreview } from "./hosted-file-preview";
 import Link from "./link-no-prefetch";
 import SortableGrid from "./sortable-grid";
-import Status from "./status";
 // lib
 import { dataSize, truthyOrZero } from "../lib/general";
 
@@ -41,7 +40,7 @@ const columns = [
   {
     id: "content_type",
     title: "Content Type",
-    sorter: (item) => item.content_type.toLowerCase(),
+    sorter: (item) => (item.content_type ?? "").toLowerCase(),
   },
   {
     id: "lab.title",
@@ -53,11 +52,6 @@ const columns = [
     title: "File Size",
     display: ({ source }) =>
       truthyOrZero(source.file_size) ? dataSize(source.file_size) : "",
-  },
-  {
-    id: "upload_status",
-    title: "Upload Status",
-    display: ({ source }) => <Status status={source.upload_status} />,
   },
 ];
 

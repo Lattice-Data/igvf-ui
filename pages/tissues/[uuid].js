@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 // components
 import AlternateAccessions from "../../components/alternate-accessions";
 import Attribution from "../../components/attribution";
-import BiomarkerTable from "../../components/biomarker-table";
 import Breadcrumbs from "../../components/breadcrumbs";
 import { BiosampleDataItems } from "../../components/common-data-items";
 import {
@@ -16,9 +15,7 @@ import { EditableItem } from "../../components/edit";
 import DocumentTable from "../../components/document-table";
 import DonorTable from "../../components/donor-table";
 import FileSetTable from "../../components/file-set-table";
-import { InstitutionalCertificateTable } from "../../components/institutional-certificate-table";
 import JsonDisplay from "../../components/json-display";
-import ModificationTable from "../../components/modification-table";
 import ObjectPageHeader from "../../components/object-page-header";
 import PagePreamble from "../../components/page-preamble";
 import SampleTable from "../../components/sample-table";
@@ -28,12 +25,10 @@ import TreatmentTable from "../../components/treatment-table";
 // lib
 import buildAttribution from "../../lib/attribution";
 import {
-  requestBiomarkers,
   requestBiosamples,
   requestDocuments,
   requestDonors,
   requestFileSets,
-  requestInstitutionalCertificates,
   requestOntologyTerms,
   requestPublications,
   requestSamples,
@@ -47,8 +42,6 @@ import { Ok } from "../../lib/result";
 
 export default function Tissue({
   tissue,
-  biomarkers,
-  constructLibrarySets,
   donors,
   originOf,
   documents,
@@ -62,8 +55,6 @@ export default function Tissue({
   sortedFractions,
   sources,
   treatments,
-  multiplexedInSamples,
-  institutionalCertificates,
   attribution = null,
   isJson,
 }) {
@@ -84,7 +75,6 @@ export default function Tissue({
             <DataArea>
               <BiosampleDataItems
                 item={tissue}
-                constructLibrarySets={constructLibrarySets}
                 diseaseTerms={diseaseTerms}
                 annotatedFrom={annotatedFrom}
                 partOf={partOf}
@@ -140,15 +130,6 @@ export default function Tissue({
           {tissue.file_sets?.length > 0 && (
             <FileSetTable fileSets={tissue.file_sets} />
           )}
-          {multiplexedInSamples.length > 0 && (
-            <SampleTable
-              samples={multiplexedInSamples}
-              reportLink={`/multireport/?type=MultiplexedSample&multiplexed_samples.@id=${tissue["@id"]}`}
-              reportLabel="Report of multiplexed samples in which this sample is included"
-              title="Multiplexed In Samples"
-              panelId="multiplexed-in-samples"
-            />
-          )}
           {pooledFrom.length > 0 && (
             <SampleTable
               samples={pooledFrom}
@@ -185,13 +166,6 @@ export default function Tissue({
               panelId="origin-of"
             />
           )}
-          {tissue.modifications?.length > 0 && (
-            <ModificationTable
-              modifications={tissue.modifications}
-              reportLink={`/multireport/?type=Modification&biosamples_modified=${tissue["@id"]}`}
-              reportLabel={`Report of genetic modifications for ${tissue.accession}`}
-            />
-          )}
           {sortedFractions.length > 0 && (
             <SampleTable
               samples={sortedFractions}
@@ -201,25 +175,11 @@ export default function Tissue({
               panelId="sorted-fractions"
             />
           )}
-          {biomarkers.length > 0 && (
-            <BiomarkerTable
-              biomarkers={biomarkers}
-              reportLink={`/multireport/?type=Biomarker&biomarker_for=${tissue["@id"]}`}
-              reportLabel={`Report of biological markers that are associated with biosample ${tissue.accession}`}
-            />
-          )}
           {treatments.length > 0 && (
             <TreatmentTable
               treatments={treatments}
               reportLink={`/multireport/?type=Treatment&biosamples_treated=${tissue["@id"]}`}
               reportLabel={`Report of treatments applied to the biosample ${tissue.accession}`}
-            />
-          )}
-          {institutionalCertificates.length > 0 && (
-            <InstitutionalCertificateTable
-              institutionalCertificates={institutionalCertificates}
-              reportLink={`/multireport/?type=InstitutionalCertificate&samples=${tissue["@id"]}`}
-              reportLabel={`Report of institutional certificates associated with ${tissue.accession}`}
             />
           )}
           {documents.length > 0 && <DocumentTable documents={documents} />}
@@ -232,10 +192,6 @@ export default function Tissue({
 Tissue.propTypes = {
   // Tissue sample to display
   tissue: PropTypes.object.isRequired,
-  // Biomarkers of the sample
-  biomarkers: PropTypes.arrayOf(PropTypes.object).isRequired,
-  // Construct library sets associated with the sample
-  constructLibrarySets: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Disease ontology for this sample
   diseaseTerms: PropTypes.arrayOf(PropTypes.object).isRequired,
   // Annotated from sample
@@ -262,10 +218,6 @@ Tissue.propTypes = {
   sources: PropTypes.arrayOf(PropTypes.object),
   // Treatments associated with the sample
   treatments: PropTypes.arrayOf(PropTypes.object).isRequired,
-  // Multiplexed in samples
-  multiplexedInSamples: PropTypes.arrayOf(PropTypes.object).isRequired,
-  // Institutional certificates referencing this sample
-  institutionalCertificates: PropTypes.arrayOf(PropTypes.object),
   // Attribution for this sample
   attribution: PropTypes.object,
   // Is the format JSON?
@@ -277,13 +229,6 @@ export async function getServerSideProps({ params, req, query }) {
   const request = new FetchRequest({ cookie: req.headers.cookie });
   const tissue = (await request.getObject(`/tissues/${params.uuid}/`)).union();
   if (FetchRequest.isResponseSuccess(tissue)) {
-    let biomarkers = [];
-    if (tissue.biomarkers?.length > 0) {
-      const biomarkerPaths = tissue.biomarkers.map(
-        (biomarker) => biomarker["@id"]
-      );
-      biomarkers = await requestBiomarkers(biomarkerPaths, request);
-    }
     let diseaseTerms = [];
     if (tissue.disease_terms?.length > 0) {
       const diseaseTermPaths = tissue.disease_terms.map((term) => term["@id"]);
@@ -336,34 +281,6 @@ export async function getServerSideProps({ params, req, query }) {
       );
       treatments = await requestTreatments(treatmentPaths, request);
     }
-    let constructLibrarySets = [];
-    if (tissue.construct_library_sets?.length > 0) {
-      const constructLibrarySetPaths = tissue.construct_library_sets.map(
-        (constructLibrarySet) => constructLibrarySet["@id"]
-      );
-      constructLibrarySets = await requestFileSets(
-        constructLibrarySetPaths,
-        request
-      );
-    }
-    let multiplexedInSamples = [];
-    if (tissue.multiplexed_in?.length > 0) {
-      const multiplexedInPaths = tissue.multiplexed_in.map(
-        (sample) => sample["@id"]
-      );
-      multiplexedInSamples = await requestSamples(multiplexedInPaths, request);
-    }
-    let institutionalCertificates = [];
-    if (tissue.institutional_certificates?.length > 0) {
-      const institutionalCertificatePaths =
-        tissue.institutional_certificates.map(
-          (institutionalCertificate) => institutionalCertificate["@id"]
-        );
-      institutionalCertificates = await requestInstitutionalCertificates(
-        institutionalCertificatePaths,
-        request
-      );
-    }
     const annotatedFrom = tissue.annotated_from
       ? (await request.getObject(tissue.annotated_from)).optional()
       : null;
@@ -378,8 +295,6 @@ export async function getServerSideProps({ params, req, query }) {
     return {
       props: {
         tissue,
-        biomarkers,
-        constructLibrarySets,
         diseaseTerms,
         annotatedFrom,
         documents,
@@ -393,10 +308,8 @@ export async function getServerSideProps({ params, req, query }) {
         sortedFractions,
         sources,
         treatments,
-        multiplexedInSamples,
-        institutionalCertificates,
         pageContext: {
-          title: `${tissue.accession} ${UC.mdash} ${tissue.sample_terms[0].term_name}`,
+          title: `${tissue.accession}${tissue.sample_terms?.[0]?.term_name ? ` ${UC.mdash} ${tissue.sample_terms[0].term_name}` : ""}`,
         },
         attribution,
         isJson,
