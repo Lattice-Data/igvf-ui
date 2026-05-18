@@ -165,7 +165,8 @@ export function sortedSeparatedList(
  * @param {string} text Text to convert.
  * @returns {string} `text` converted to shishkebab case.
  */
-export function toShishkebabCase(text: string): string {
+export function toShishkebabCase(text: string | null | undefined): string {
+  if (!text) return "";
   return text
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
