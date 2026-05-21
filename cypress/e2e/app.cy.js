@@ -18,29 +18,26 @@ describe("Navigation", () => {
     cy.url().should("include", "/profiles/");
     cy.get("h1").should("have.text", "Schema Directory");
 
+    cy.get("[data-testid=navigation-data-model]").click();
+    cy.get("[data-testid=navigation-audits]").click();
+    cy.url().should("include", "/audits");
+    cy.get("h1").should("have.text", "Audit Documentation");
+
     // Test Data submenus.
     cy.get("[data-testid=navigation-data]").click();
 
-    cy.get("[data-testid=navigation-raw-datasets]").click();
-    cy.url().should("include", "/search/?type=MeasurementSet");
-    cy.get("h1").should("exist"); // Actual title depends on data
-
-    cy.get("[data-testid=navigation-processed-datasets]").click();
-    cy.url().should("include", "/search/?type=AnalysisSet");
-    cy.get("h1").should("exist"); // Actual title depends on data
+    cy.get("[data-testid=navigation-samples]").click();
+    cy.url().should("include", "/multireport/?type=Biosample");
+    cy.get("h1").should("exist");
 
     cy.get("[data-testid=navigation-files]").click();
-    cy.url().should("include", "/search/?type=File");
-    cy.get("h1").should("exist"); // Actual title depends on data
+    cy.url().should("include", "/multireport/?type=File");
+    cy.get("h1").should("exist");
 
-    // Test Resources and Standards submenus. Add to this once the pages these submenus link to exist.
-    cy.get("[data-testid=navigation-resources-standards]").click();
-
-    // Test About submenus. Add to this once the pages these submenus link to exist.
+    // Test About submenus.
     cy.get("[data-testid=navigation-about]").click();
-
-    // Test Help submenus. Add to this once the pages these submenus link to exist.
-    cy.get("[data-testid=navigation-help]").click();
+    cy.get("[data-testid=navigation-lattice]").click();
+    cy.url().should("include", "/lattice");
   });
 
   it("should load every schema's list and report page", () => {
