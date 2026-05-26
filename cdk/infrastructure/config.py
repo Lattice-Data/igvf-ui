@@ -25,7 +25,7 @@ config: Dict[str, Any] = {
             'existing_resources_class': igvf_dev.Resources,
             'account_and_region': igvf_dev.US_WEST_2,
             'tags': [
-                ('time-to-live-hours', '60'),
+                ('time-to-live-hours', '72'),
                 ('turn-off-on-friday-night', 'yes'),
             ],
         },
@@ -70,7 +70,7 @@ config: Dict[str, Any] = {
                 'arn': 'arn:aws:wafv2:us-west-2:159466469043:regional/webacl/Lattice2UiDemoWaf-80ZGFPAwWR1c/1d0513b8-092c-404e-96ed-0d5a0c548c9b',
             },
             'tags': [
-                ('time-to-live-hours', '60'),
+                ('time-to-live-hours', '72'),
                 ('turn-off-on-friday-night', 'yes'),
             ],
         },
@@ -127,6 +127,7 @@ config: Dict[str, Any] = {
             'backend_url': 'https://api.staging.lattice-data.org',
             'use_subdomain': False,
             'tags': [
+                ('time-to-live-hours', '24'),
             ],
         },
         'sandbox': {
@@ -155,6 +156,7 @@ config: Dict[str, Any] = {
             'backend_url': 'https://api.sandbox.lattice-data.org',
             'use_subdomain': False,
             'tags': [
+                ('time-to-live-hours', '24'),
             ],
         },
         'production': {
