@@ -14,6 +14,9 @@ const auditColumns = [
     display: ({ source }) => {
       const auditLevel = source.audit_level;
       const mapping = auditMap[auditLevel];
+      if (!mapping) {
+        return <div className="flex justify-center">{auditLevel}</div>;
+      }
       return (
         <div className="flex items-center justify-center gap-1">
           <mapping.Icon className={`h-4 w-4 ${mapping.color}`} />
@@ -46,7 +49,7 @@ export default function AuditTable({ data }) {
   // Sort audits with `audit_level` as the primary key and `audit_category` as the secondary key.
   const sortedData = _.sortBy(data, [
     (audit) => auditLevelOrder.indexOf(audit.audit_level),
-    (audit) => audit.audit_category.toLowerCase(),
+    (audit) => audit.audit_category?.toLowerCase() || "",
   ]);
 
   return (

@@ -1,7 +1,6 @@
 // node_modules
-import _ from "lodash";
 import PropTypes from "prop-types";
-import { Fragment, useContext } from "react";
+import { useContext, useEffect } from "react";
 // component
 import AuditKeyTable from "../components/audit-key-table";
 import AuditTable from "../components/audit-table";
@@ -13,9 +12,9 @@ import {
 } from "../components/section-directory";
 import SessionContext from "../components/session-context";
 // lib
+import { groupAuditDocByType, unmatchedAuditTypes } from "../lib/audit";
 import { errorObjectToProps } from "../lib/errors";
 import FetchRequest from "../lib/fetch-request";
-import { snakeCaseToPascalCase } from "../lib/general";
 import { retrieveProfiles } from "../lib/server-objects";
 
 const auditKeyColor = [
@@ -86,7 +85,7 @@ function DirectoryItemRenderer({ section }) {
     return (
       <div
         style={{
-          paddingLeft: `${level * 0.8}rem`,
+          paddingLeft: `${Math.max(level, 0) * 0.8}rem`,
           fontWeight: isParent ? "bold" : "normal",
         }}
       >
@@ -105,6 +104,38 @@ DirectoryItemRenderer.propTypes = {
   }).isRequired,
 };
 
+/**
+ * Section of the audits page holding every audit that applies to one object type. The heading acts
+ * as the target for the section directory.
+ */
+function AuditSection({ type, title, audits, isParent = false }) {
+  return (
+    <>
+      <h2
+        className={`text-brand mt-8 mb-1 text-lg dark:text-[#8fb3a5] ${
+          isParent ? "font-semibold" : ""
+        }`}
+        id={secDirId(type)}
+        data-type={type}
+      >
+        {title}
+      </h2>
+      <AuditTable data={audits} />
+    </>
+  );
+}
+
+AuditSection.propTypes = {
+  // `@type` the audits in this section apply to
+  type: PropTypes.string.isRequired,
+  // Heading to display for the section
+  title: PropTypes.string.isRequired,
+  // Audits to display in this section
+  audits: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // True if the type has child types in the schema hierarchy
+  isParent: PropTypes.bool,
+};
+
 export default function AuditDoc({ auditDoc, schemas }) {
   const { collectionTitles, profiles } = useContext(SessionContext);
   const hierarchy = profiles?._hierarchy.Item || null;
@@ -113,14 +144,27 @@ export default function AuditDoc({ auditDoc, schemas }) {
     hash: hierarchy ? "profiles" : "",
   });
 
-  const result = _.flatMap(auditDoc, (auditGroup, key) => {
-    return auditGroup.map((audit) => {
-      const newKeys = snakeCaseToPascalCase(key.split(".")[2]);
-      return { ...audit, newKeys };
-    });
-  });
-  const auditsGroupedByCollection = _.groupBy(result, "newKeys");
+  const auditsGroupedByCollection = groupAuditDocByType(auditDoc);
   const allSchemaNames = flattenHierarchy(schemas._hierarchy.Item, schemas);
+
+  // Audits documented against something the page has no section for. Collect them into a trailing
+  // section so that they stay visible instead of disappearing without a trace.
+  const unmatchedTypes = unmatchedAuditTypes(
+    auditsGroupedByCollection,
+    allSchemaNames
+  );
+  const unmatchedAudits = unmatchedTypes.flatMap(
+    (type) => auditsGroupedByCollection[type]
+  );
+  const unmatchedTypesKey = unmatchedTypes.join(", ");
+
+  useEffect(() => {
+    if (unmatchedTypesKey) {
+      console.warn(
+        `Audit documentation covers types with no matching schema: ${unmatchedTypesKey}`
+      );
+    }
+  }, [unmatchedTypesKey]);
 
   return (
     <>
@@ -142,25 +186,22 @@ export default function AuditDoc({ auditDoc, schemas }) {
       {allSchemaNames.map((itemType) => {
         const typeAudits = auditsGroupedByCollection[itemType];
         if (typeAudits) {
-          const title = collectionTitles?.[itemType] || itemType;
           const { isParent } = getTypeLevel(itemType, hierarchy);
           return (
-            <Fragment key={itemType}>
-              <h2
-                className={`text-brand mt-8 mb-1 text-lg dark:text-[#8fb3a5] ${
-                  isParent ? "font-semibold" : ""
-                }`}
-                id={`${secDirId(itemType)}`}
-                data-type={itemType}
-              >
-                {title}
-              </h2>
-              <AuditTable data={typeAudits} key={itemType} />
-            </Fragment>
+            <AuditSection
+              key={itemType}
+              type={itemType}
+              title={collectionTitles?.[itemType] || itemType}
+              audits={typeAudits}
+              isParent={isParent}
+            />
           );
         }
         return null;
       })}
+      {unmatchedAudits.length > 0 && (
+        <AuditSection type="Other" title="Other" audits={unmatchedAudits} />
+      )}
     </>
   );
 }
