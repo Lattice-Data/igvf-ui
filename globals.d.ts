@@ -1,4 +1,5 @@
 import { type InstitutionalCertificateObject } from "./lib/data-use-limitation";
+import { type TaxaValue } from "./lib/taxa";
 
 /**
  * Single audit within an audit category.
@@ -439,7 +440,7 @@ export interface HumanDonorObject extends DatabaseObject {
   publications?: string[] | PublicationObject[];
   related_donors?: RelatedDonorObject[];
   sex?: string;
-  taxa: string;
+  taxa: TaxaValue;
   url?: string;
   virtual?: boolean;
 }

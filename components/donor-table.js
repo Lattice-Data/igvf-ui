@@ -6,6 +6,8 @@ import { DataAreaTitle, DataAreaTitleLink } from "./data-area";
 import LinkedIdAndStatus from "./linked-id-and-status";
 import SortableGrid from "./sortable-grid";
 import { AliasesCell } from "./table-cells";
+// lib
+import { getTaxaName } from "../lib/taxa";
 
 const columns = [
   {
@@ -29,6 +31,8 @@ const columns = [
   {
     id: "taxa",
     title: "Taxa",
+    display: ({ source }) => <i>{getTaxaName(source.taxa)}</i>,
+    sorter: (item) => getTaxaName(item.taxa),
   },
   {
     id: "ethnicities",
