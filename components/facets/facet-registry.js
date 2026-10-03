@@ -23,17 +23,21 @@ const facetRegistry = {
   // Custom tag labels.
   tagLabel: {
     "donors.taxa": TaxaTagLabel,
+    "donors.taxa.term_name": TaxaTagLabel,
     creation_timestamp: DateRangeTagLabel,
     file_size: FileSizeTagLabel,
     release_timestamp: DateRangeTagLabel,
     taxa: TaxaTagLabel,
+    "taxa.term_name": TaxaTagLabel,
     standard: StandardTagLabel,
   },
 
   // Custom term labels and document counts for a standard facet term.
   termLabel: {
     "donors.taxa": TaxaTermLabel,
+    "donors.taxa.term_name": TaxaTermLabel,
     taxa: TaxaTermLabel,
+    "taxa.term_name": TaxaTermLabel,
     standard: StandardTermLabel,
   },
 

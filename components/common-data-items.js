@@ -33,6 +33,7 @@ import { Tooltip, TooltipRef, useTooltip } from "./tooltip";
 import { checkCheckfilesVersionVisible } from "../lib/checkfiles-version";
 import { formatDate } from "../lib/dates";
 import { dataSize, truthyOrZero } from "../lib/general";
+import { getTaxaName } from "../lib/taxa";
 
 /**
  * Display the data items common to all donor-derived objects.
@@ -43,7 +44,9 @@ export function DonorDataItems({ item, publications = [], children }) {
       {item.taxa && (
         <>
           <DataItemLabel>Taxa</DataItemLabel>
-          <DataItemValue>{item.taxa}</DataItemValue>
+          <DataItemValue>
+            <i>{getTaxaName(item.taxa)}</i>
+          </DataItemValue>
         </>
       )}
       {item.ethnicities?.length > 0 && (
@@ -180,7 +183,9 @@ export function SampleDataItems({
       {item.taxa && (
         <>
           <DataItemLabel>Taxa</DataItemLabel>
-          <DataItemValue>{item.taxa}</DataItemValue>
+          <DataItemValue>
+            <i>{getTaxaName(item.taxa)}</i>
+          </DataItemValue>
         </>
       )}
       {item.description && (
